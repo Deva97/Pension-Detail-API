@@ -1,0 +1,33 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pensionerdetailconfig-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Pensionerdetailconfig
+  template:
+    metadata:
+      labels:
+        app: Pensionerdetailconfig
+    spec:
+      containers:
+      - name: pensionerdetailrepos
+        image: dnazureacr.azurecr.io/pensionerdetailrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: dsconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pensionerdetailconfig
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: Pensionerdetailconfig
